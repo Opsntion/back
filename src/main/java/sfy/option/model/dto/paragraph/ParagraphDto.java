@@ -1,17 +1,17 @@
-package sfy.option.model.dto;
+package sfy.option.model.dto.paragraph;
 
 import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardDto {
+public class ParagraphDto {
 	String userId;
 	String title;
 	String content;
 
 	@Builder
-	public BoardDto(String userId, String title, String content, int viewCount) {
+	public ParagraphDto(String userId, String title, String content, int viewCount) {
 		this.userId = userId;
 		this.title = title;
 		this.content = content;
