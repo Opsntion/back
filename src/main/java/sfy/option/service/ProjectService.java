@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.Random;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -26,7 +26,7 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    public ProjectDto getProjectById(int id) {
+    public ProjectDto getProjectById(long id) {
         return convertToDto(Objects.requireNonNull(projectRepository.findById(id).orElse(null)));
     }
 
@@ -39,20 +39,19 @@ public class ProjectService {
         return true;
     }
 
-    public ProjectEntity updateProject(int id, RequestProjectDto requestProjectDto) {
+    public boolean updateProject(long id, RequestProjectDto requestProjectDto) {
         Optional<ProjectEntity> optionalProjectEntity = projectRepository.findById(id);
         if (optionalProjectEntity.isPresent()) {
             ProjectEntity projectEntity = optionalProjectEntity.get();
             projectEntity.setTitle(requestProjectDto.getTitle());
-            // URI는 일반적으로 업데이트하지 않는다고 가정하고 무시
-            return projectRepository.save(projectEntity);
+            projectRepository.save(projectEntity);
+            return true;
         } else {
-            // 해당 ID로 프로젝트를 찾지 못한 경우 예외 처리 또는 null 반환 등의 방법 선택
             throw new RuntimeException("Project not found with id: " + id);
         }
     }
 
-    public boolean deleteProject(int id) {
+    public boolean deleteProject(long id) {
         if (projectRepository.existsById(id)) {
             projectRepository.deleteById(id);
             return true;

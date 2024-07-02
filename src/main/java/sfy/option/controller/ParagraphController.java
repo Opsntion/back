@@ -22,18 +22,18 @@ public class ParagraphController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ParagraphDto> getParagraphById(@PathVariable int id) {
+	public ResponseEntity<ParagraphEntity> getParagraphById(@PathVariable int id) {
 		return ResponseEntity.ok(paragraphService.getParagraphById(id));
 	}
 
 	@PostMapping("")
-	public ResponseEntity<Boolean> createParagraph(@RequestBody ParagraphDto boardDto) {
-		return ResponseEntity.ok(paragraphService.createParagraph(boardDto));
+	public ResponseEntity<Boolean> createParagraph(@RequestBody ParagraphDto paragraphDto) {
+		return ResponseEntity.ok(paragraphService.createParagraph(paragraphDto));
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Boolean> updateParagraph(@PathVariable int id, @RequestBody ParagraphDto boardDto) {
-		return ResponseEntity.ok(paragraphService.updateParagraph(id, boardDto));
+	@PutMapping("")
+	public ResponseEntity<Boolean> updateParagraph(@RequestBody ParagraphEntity paragraphEntity) {
+		return ResponseEntity.ok(paragraphService.updateParagraph(paragraphEntity));
 	}
 
 	@DeleteMapping("/{id}")

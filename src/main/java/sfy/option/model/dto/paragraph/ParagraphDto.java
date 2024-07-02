@@ -4,16 +4,12 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ParagraphDto {
-	String userId;
-	String title;
-	String content;
-
-	@Builder
-	public ParagraphDto(String userId, String title, String content, int viewCount) {
-		this.userId = userId;
-		this.title = title;
-		this.content = content;
-	}
+	private long projectId;
+	private int blockNumber;
+	private ContentType contentType;
+	private String content;
 }

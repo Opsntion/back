@@ -14,11 +14,12 @@ public class ProjectEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "uid")
-    private int uid;
+    private long uid;
 
     @Column(name = "user_id", nullable = false)
     private String userId;
 
+    @Setter
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -28,17 +29,16 @@ public class ProjectEntity {
     @ManyToMany(mappedBy = "projects")
     private Set<UserEntity> users;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ParagraphEntity> paragraphs;
+
     @Builder
-    public ProjectEntity(int uid, String userId, String title, String uri, Set<UserEntity> users) {
+    public ProjectEntity(long uid, String userId, String title, String uri, Set<UserEntity> users, Set<ParagraphEntity> paragraphs) {
         this.uid = uid;
         this.userId = userId;
         this.title = title;
         this.uri = uri;
         this.users = users;
-    }
-
-    @Setter
-    public void setTitle(String title) {
-        this.title = title;
+        this.paragraphs = paragraphs;
     }
 }

@@ -22,7 +22,7 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectDto> getProjectById(@PathVariable int id) {
+    public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
     }
 
@@ -32,12 +32,12 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Boolean> updateProject(@PathVariable int id, @RequestBody RequestProjectDto requestProjectDto) {
+    public ResponseEntity<Boolean> updateProject(@PathVariable long id, @RequestBody RequestProjectDto requestProjectDto) {
         return ResponseEntity.ok(projectService.updateProject(id, requestProjectDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteProject(@PathVariable int id) {
+    public ResponseEntity<Boolean> deleteProject(@PathVariable long id) {
         return ResponseEntity.ok(projectService.deleteProject(id));
     }
 }
