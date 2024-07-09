@@ -17,12 +17,12 @@ public class UserController {
     private final UserService UserService;
 
     @PostMapping("/register")
-    public ResponseEntity<Boolean> createUser(@RequestBody UserEntity userEntity) {
+    public ResponseEntity<String> createUser(@RequestBody UserEntity userEntity) {
         return ResponseEntity.ok(UserService.createUser(userEntity));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody UserEntity userEntity) {
+    public ResponseEntity<String> login(@RequestBody UserEntity userEntity) {
         return ResponseEntity.ok(UserService.login(userEntity));
     }
 

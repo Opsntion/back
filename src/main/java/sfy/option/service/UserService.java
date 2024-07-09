@@ -1,7 +1,9 @@
 package sfy.option.service;
 
+import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sfy.option.exception.UserIdAndPasswordException;
 import sfy.option.model.entity.UserEntity;
 import sfy.option.repository.UserRepository;
 
@@ -10,17 +12,23 @@ import sfy.option.repository.UserRepository;
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final JwtService jwtService;
 
-	public boolean createUser(UserEntity userEntity) {
+	public String createUser(UserEntity userEntity) {
 		if (userRepository.existsById(userEntity.getId())) {
-			return false;
+			throw new UserIdAndPasswordException();
 		}
+
 		userRepository.save(userEntity);
-		return true;
+		return jwtService.create("id", userEntity.getId(), userEntity.getPassword());
 	}
 
-	public boolean login(UserEntity userEntity) {
-		return true;
+	public String login(UserEntity userEntity) {
+		if (userRepository.existsById(userEntity.getId())) {
+			throw new UserIdAndPasswordException();
+		}
+
+        return jwtService.create("id", userEntity.getId(), userEntity.getPassword());
 	}
 
 	public boolean logout(UserEntity userEntity) {
