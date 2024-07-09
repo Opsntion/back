@@ -14,11 +14,11 @@ public class ParagraphEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "uid")
+    private long uid;
 
     @ManyToOne
-    @JoinColumn(name = "project_uid", nullable = false)
+    @JoinColumn(name = "project_uid", referencedColumnName = "uid", nullable = false)
     private ProjectEntity project;
 
     @Column(name = "block_number", nullable = false)
@@ -32,8 +32,8 @@ public class ParagraphEntity {
     private String content;
 
     @Builder
-    public ParagraphEntity(long id, ProjectEntity project, int blockNumber, ContentType contentType, String content) {
-        this.id = id;
+    public ParagraphEntity(long uid, ProjectEntity project, int blockNumber, ContentType contentType, String content) {
+        this.uid = uid;
         this.project = project;
         this.blockNumber = blockNumber;
         this.contentType = contentType;

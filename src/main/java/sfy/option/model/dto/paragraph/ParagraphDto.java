@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ParagraphDto {
-	private long projectId;
+	private long projectUid;
 	private int blockNumber;
 	private ContentType contentType;
 	private String content;

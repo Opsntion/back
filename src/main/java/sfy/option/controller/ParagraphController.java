@@ -16,16 +16,6 @@ public class ParagraphController {
 
 	private final ParagraphService paragraphService;
 
-	@GetMapping("/all")
-	public ResponseEntity<List<ParagraphEntity>> getAllParagraphs() {
-		return ResponseEntity.ok(paragraphService.getAllParagraphs());
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<ParagraphEntity> getParagraphById(@PathVariable int id) {
-		return ResponseEntity.ok(paragraphService.getParagraphById(id));
-	}
-
 	@PostMapping("")
 	public ResponseEntity<Boolean> createParagraph(@RequestBody ParagraphDto paragraphDto) {
 		return ResponseEntity.ok(paragraphService.createParagraph(paragraphDto));
@@ -36,8 +26,18 @@ public class ParagraphController {
 		return ResponseEntity.ok(paragraphService.updateParagraph(paragraphEntity));
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> deleteParagraph(@PathVariable int id) {
-		return ResponseEntity.ok(paragraphService.deleteParagraph(id));
+	@DeleteMapping("/{uid}")
+	public ResponseEntity<Boolean> deleteParagraph(@PathVariable("uid") long uid) {
+		return ResponseEntity.ok(paragraphService.deleteParagraph(uid));
+	}
+
+	@GetMapping("/{uid}")
+	public ResponseEntity<ParagraphEntity> getParagraphById(@PathVariable("uid") long uid) {
+		return ResponseEntity.ok(paragraphService.getParagraphById(uid));
+	}
+
+	@GetMapping("/all")
+	public ResponseEntity<List<ParagraphEntity>> getAllParagraphs() {
+		return ResponseEntity.ok(paragraphService.getAllParagraphs());
 	}
 }

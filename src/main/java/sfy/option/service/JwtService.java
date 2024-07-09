@@ -1,20 +1,15 @@
 package sfy.option.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import sfy.option.config.PropertiesConfig;
 import sfy.option.exception.UnauthorizedException;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -27,53 +22,31 @@ public class JwtService {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("regDate", System.currentTimeMillis())
-                .setExpiration(getExpireMinutes())
+                .setExpiration(getExpireTime())
                 .setSubject(subject)
                 .claim(key, data)
                 .signWith(SignatureAlgorithm.HS256, generateKey())
                 .compact();
     }
 
-    private Date getExpireMinutes() {
-        return new Date(System.currentTimeMillis() + propertiesConfig.getEXPIRE_MINUTES() * 60 * 10000);
+    private Date getExpireTime() {
+        return Date.from(Instant.now().plus(propertiesConfig.getEXPIRE_DAY()));
     }
 
     private byte[] generateKey() {
         return propertiesConfig.getSALT().getBytes(StandardCharsets.UTF_8);
     }
 
-    public boolean isUsable(String jwt) {
+    public boolean isUsable(String token) {
         try {
-            Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(jwt);
+            Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-			throw new UnauthorizedException();
+            throw new UnauthorizedException();
         }
     }
 
-    public Map<String, Object> get(String key) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String jwt = request.getHeader("access-token");
-        Jws<Claims> claims;
-        try {
-            claims = Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(jwt);
-        } catch (Exception e) {
-//			if (logger.isInfoEnabled()) {
-//				e.printStackTrace();
-//			} else {
-//            logger.error(e.getMessage());
-//			}
-//            throw new UnauthorizedException();
-            Map<String, Object> testMap = new HashMap<>();
-            testMap.put("userid", "TEST");
-            return testMap;
-        }
-        Map<String, Object> value = claims.getBody();
-//        logger.info("value : {}", value);
-        return value;
-    }
-
-    public String getUserId() {
-        return (String) get("user").get("userid");
+    public Map<String, Object> getBody(String token) {
+        return Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token).getBody();
     }
 }

@@ -16,28 +16,28 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ProjectDto>> getAllProjects() {
-        return ResponseEntity.ok(projectService.getAllProjects());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ProjectDto> getProjectById(@PathVariable long id) {
-        return ResponseEntity.ok(projectService.getProjectById(id));
-    }
-
     @PostMapping("")
     public ResponseEntity<Boolean> createProject(@RequestBody RequestProjectDto requestProjectDto) {
         return ResponseEntity.ok(projectService.createProject(requestProjectDto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Boolean> updateProject(@PathVariable long id, @RequestBody RequestProjectDto requestProjectDto) {
-        return ResponseEntity.ok(projectService.updateProject(id, requestProjectDto));
+    @PutMapping("/{uid}")
+    public ResponseEntity<Boolean> updateProject(@PathVariable("uid") long uid, @RequestBody RequestProjectDto requestProjectDto) {
+        return ResponseEntity.ok(projectService.updateProject(uid, requestProjectDto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteProject(@PathVariable long id) {
-        return ResponseEntity.ok(projectService.deleteProject(id));
+    @DeleteMapping("/{uid}")
+    public ResponseEntity<Boolean> deleteProject(@PathVariable("uid") long uid) {
+        return ResponseEntity.ok(projectService.deleteProject(uid));
+    }
+
+    @GetMapping("/{uid}")
+    public ResponseEntity<ProjectDto> getProjectById(@PathVariable("uid") long uid) {
+        return ResponseEntity.ok(projectService.getProjectById(uid));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ProjectDto>> getAllProjects() {
+        return ResponseEntity.ok(projectService.getAllProjects());
     }
 }

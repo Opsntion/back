@@ -15,45 +15,52 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ParagraphService {
 
-	private final ProjectRepository projectRepository;
-	private final ParagraphRepository paragraphRepository;
+    private final ProjectRepository projectRepository;
+    private final ParagraphRepository paragraphRepository;
 
-	public List<ParagraphEntity> getAllParagraphs() {
-		return paragraphRepository.findAll();
-	}
+    public boolean createParagraph(ParagraphDto paragraphDto) {
+        Optional<ProjectEntity> optionalProjectEntity = projectRepository.findById(paragraphDto.getProjectUid());
+        if (optionalProjectEntity.isEmpty()) {
+            throw new RuntimeException("Project not found with project uid: " + paragraphDto.getProjectUid());
+        }
 
-	public ParagraphEntity getParagraphById(long id) {
-		Optional<ParagraphEntity> optionalParagraph = paragraphRepository.findById(id);
-		return optionalParagraph.orElse(null);
-	}
+        // contentType 별로 처리 필요, 그림 <> 글
+        paragraphRepository.save(ParagraphEntity.builder()
+                .project(optionalProjectEntity.get())
+                .blockNumber(paragraphDto.getBlockNumber())
+                .contentType(paragraphDto.getContentType())
+                .content(paragraphDto.getContent())
+                .build());
+        return true;
+    }
 
-	public boolean createParagraph(ParagraphDto paragraphDto) {
-		Optional<ProjectEntity> optionalProjectEntity = projectRepository.findById(paragraphDto.getProjectId());
-		// contentType 별로 처리 필요, 그림 <> 글
-		if (optionalProjectEntity.isPresent()) {
-			paragraphRepository.save(ParagraphEntity.builder()
-					.project(optionalProjectEntity.get())
-					.blockNumber(paragraphDto.getBlockNumber())
-					.contentType(paragraphDto.getContentType())
-					.content(paragraphDto.getContent())
-					.build());
-			return true;
-		}
-		throw new RuntimeException("Project not found with project id: " + paragraphDto.getProjectId());
-	}
 
-	public boolean deleteParagraph(long id) {
-		paragraphRepository.deleteById(id);
-		return true;
-	}
+    public boolean updateParagraph(ParagraphEntity paragraphEntity) {
+        Optional<ParagraphEntity> optionalParagraph = paragraphRepository.findById(paragraphEntity.getUid());
 
-	public boolean updateParagraph(ParagraphEntity paragraphEntity) {
-		Optional<ParagraphEntity> optionalParagraph = paragraphRepository.findById(paragraphEntity.getId());
-		if (optionalParagraph.isPresent()) {
-			paragraphRepository.save(paragraphEntity);
-			return true;
-		} else {
-			return false;
-		}
-	}
+        if (optionalParagraph.isEmpty()) {
+            return false;
+        }
+
+        paragraphRepository.save(paragraphEntity);
+        return true;
+    }
+
+    public boolean deleteParagraph(long uid) {
+        if (!paragraphRepository.existsById(uid)){
+            return false;
+        }
+
+        paragraphRepository.deleteById(uid);
+        return true;
+    }
+
+    public ParagraphEntity getParagraphById(long uid) {
+        Optional<ParagraphEntity> optionalParagraph = paragraphRepository.findById(uid);
+        return optionalParagraph.orElse(null);
+    }
+
+    public List<ParagraphEntity> getAllParagraphs() {
+        return paragraphRepository.findAll();
+    }
 }

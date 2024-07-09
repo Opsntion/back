@@ -1,9 +1,10 @@
 package sfy.option.model.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.Set;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -16,8 +17,9 @@ public class ProjectEntity {
     @Column(name = "uid")
     private long uid;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private UserEntity user;
 
     @Setter
     @Column(name = "title", nullable = false)
@@ -26,19 +28,11 @@ public class ProjectEntity {
     @Column(name = "url", nullable = false, unique = true)
     private String uri;
 
-    @ManyToMany(mappedBy = "projects")
-    private Set<UserEntity> users;
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ParagraphEntity> paragraphs;
-
     @Builder
-    public ProjectEntity(long uid, String userId, String title, String uri, Set<UserEntity> users, Set<ParagraphEntity> paragraphs) {
+    public ProjectEntity(long uid, UserEntity user, String title, String uri) {
         this.uid = uid;
-        this.userId = userId;
+        this.user = user;
         this.title = title;
         this.uri = uri;
-        this.users = users;
-        this.paragraphs = paragraphs;
     }
 }
