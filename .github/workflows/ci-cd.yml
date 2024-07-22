@@ -48,7 +48,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: ${{ secrets.EC2_PORT }}
         script: |
-          cd /home/ec2-user
+          cd /home/ec2-user/back
           docker-compose down
           docker-compose pull
           docker-compose up -d
