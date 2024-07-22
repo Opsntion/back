@@ -39,7 +39,17 @@ jobs:
       run: |
         docker build -t tlgus123/opsntion-app:latest .
         docker push tlgus123/opsntion-app:latest
-
+        
+    - name: Copy files via SSH
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        port: ${{ secrets.EC2_PORT }}
+        source: "docker-compose.yml"
+        target: "/home/ec2-user/back/"
+        
     - name: SSH and deploy to EC2
       uses: appleboy/ssh-action@v0.1.4
       with:
