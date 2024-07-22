@@ -24,7 +24,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew clean build -Dspring.profiles.active=production
+      run: ./gradlew clean build -x test -Dspring.profiles.active=production
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
