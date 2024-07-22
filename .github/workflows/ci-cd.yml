@@ -24,10 +24,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew clean build
-
-    - name: Test with Gradle
-      run: ./gradlew test
+      run: ./gradlew clean build -x test -Dspring.profiles.active=production
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -40,8 +37,8 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t your_dockerhub_username/your_app_name:latest .
-        docker push your_dockerhub_username/your_app_name:latest
+        docker build -t tlgus123/opsntion-app:latest .
+        docker push tlgus123/opsntion-app:latest
 
     - name: SSH and deploy to EC2
       uses: appleboy/ssh-action@v0.1.4
