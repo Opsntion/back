@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  servlet:
+    application-display-name: option
+
+spring:
+  datasource:
+    url: jdbc:mysql://172.20.0.1:3306/opsntion
+    username: admin
+    password: tlgus1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.format-sql: true
+      hibernate.show-sql: true
+
+jwt:
+  secret:
+    salt: ty
+    expire-day: 1d
+    header-auth: token
