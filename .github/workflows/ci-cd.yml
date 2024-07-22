@@ -3,7 +3,7 @@ name: CI/CD
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -39,16 +39,16 @@ jobs:
       run: |
         docker build -t tlgus123/opsntion-app:latest .
         docker push tlgus123/opsntion-app:latest
-
+               
     - name: SSH and deploy to EC2
-      uses: appleboy/ssh-action@v0.1.4
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         port: ${{ secrets.EC2_PORT }}
         script: |
-          cd /home/ec2-user
+          cd /home/ec2-user/back
           docker-compose down
           docker-compose pull
           docker-compose up -d
